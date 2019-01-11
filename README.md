@@ -1,3 +1,5 @@
+Work-in-progres...
+
 # ImageComponentAnalysis
 
 [![Build Status](https://travis-ci.com/zygmuntszpak/ImageComponentAnalysis.jl.svg?branch=master)](https://travis-ci.com/zygmuntszpak/ImageComponentAnalysis.jl)
