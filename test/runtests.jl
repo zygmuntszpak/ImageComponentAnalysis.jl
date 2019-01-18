@@ -1,6 +1,7 @@
 using ImageComponentAnalysis
-using Test
+using Test, Images
 
 @testset "ImageComponentAnalysis.jl" begin
-    # Write your own tests here.
+    include("test_images.jl")
+    include("contour_tracing.jl")
 end
