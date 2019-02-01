@@ -17,15 +17,7 @@ http://www.imageprocessingplace.com/downloads_V3/root_downloads/tutorials/contou
 # Move from bottom to top and left to right to find the first boundary pixel.
 # Sets up starting pixel and array of the boundary coordinates needed to
 # begin finding the boundary.
-function trace_contour()#algorithm::MooreTracing, img::AbstractArray{Int,2})
-    img = [0 0 0 0 0 0 0;
-           0 1 1 1 1 1 1;
-           1 1 1 1 1 1 1;
-           1 1 0 0 0 1 1;
-           1 1 0 0 0 1 1;
-           1 1 1 1 1 1 1;
-           0 1 1 1 1 1 0;
-           0 0 0 0 0 0 0]
+function trace_contour(algorithm::MooreTracing, img::AbstractArray{Int,2})
     boundary = Array{Tuple{Int, Int}}(undef, 0)
     components = zeros(Int, maximum(img), 4)
     boundary_lengths = Array{Int}(undef, 0)
