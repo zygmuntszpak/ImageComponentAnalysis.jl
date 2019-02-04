@@ -1,6 +1,7 @@
 using ImageComponentAnalysis
-using Test
+using Test, Images
 
 @testset "ImageComponentAnalysis.jl" begin
-    # Write your own tests here.
+    include("test_volumes.jl")
+    include("one_component_3d.jl")
 end
