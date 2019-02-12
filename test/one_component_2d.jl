@@ -5,7 +5,7 @@
         for i = 1:20
             test_image = eval(Symbol("test_image_$(i)"))
 
-            # Call one component 2d algorithm and compare the number of components
+            # Call one component 2D algorithm and compare the number of components.
             labels = ImageComponentAnalysis.label_components(OneComponent2D(), test_image)
             num_components = maximum(labels)
 

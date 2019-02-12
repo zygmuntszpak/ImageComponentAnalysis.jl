@@ -1,7 +1,6 @@
 module ImageComponentAnalysis
 
 using Images
-using PaddedViews
 using OffsetArrays
 using StaticArrays
 using DataStructures
@@ -27,10 +26,10 @@ include("one_component_3d.jl")
 export
     label_components,
     ContourTracing,
-	  FourConnected,
-	  EightConnected,
-	  OneComponent2D,
+	FourConnected,
+	EightConnected,
+	OneComponent2D,
     OneComponent3D,
-	  CostaOuter,
-	  MooreInner  
+	CostaOuter,
+	MooreInner
 end # module

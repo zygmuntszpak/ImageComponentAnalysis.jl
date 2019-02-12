@@ -12,7 +12,6 @@ function trace_boundary(t::MooreInner, labels::AbstractArray, N::Int = 0)
     # 5 6 7
     N₈ = OffsetVector(CartesianIndex.([(0, 1), (-1, 1), (-1, 0), (-1, -1), (0, -1), (1, -1), (1, 0), (1, 1)]), 0:7)
     stroke_direction = OffsetVector([6, 6, 0, 0, 2, 2, 4, 4], 0:7)
-    # TODO foundfirst instead of isfirst
     isfirst = fill(true, N)
     # CartesianIndices(labels) will loop over the "interior" of labels_padded.
     for p in CartesianIndices(labels)
@@ -47,10 +46,7 @@ function trace_boundary(t::MooreInner, labels::AbstractArray, N::Int = 0)
             end
         end
     end
-    for n in 1:N
-        boundary[n] = unique!(boundary[n])
-    end
-    boundary
+    unique!.(boundary[n])
 end
 
 function find_second_inner(p, N₈, labels, l, stroke_direction)

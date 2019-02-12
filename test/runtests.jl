@@ -7,6 +7,5 @@ using Test, Images
     include("contour_tracing.jl")
     include("one_component_2d.jl")
     include("one_component_3d.jl")
-    # include("moore_tracing.jl")
-    # include("outer_tracing.jl")
+    include("contour_tracing.jl")
 end

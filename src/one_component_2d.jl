@@ -1,6 +1,7 @@
 """
 ```
-label_components(OneComponent2D(), binary_image [, connectivity])
+label_components(OneComponent2D(), binary_image, connectivity)
+label_components(OneComponent2D(), binary_image)
 ```
 
 Computes the connected components of a binary image using the connectivity specified.

@@ -7,7 +7,7 @@
 
             for n = 3:2:max(size(test_volume)...)
 
-                # Call one component 3d algorithm and compare the number of components
+                # Call one component 3D algorithm and compare the number of components.
                 labels = ImageComponentAnalysis.label_components(OneComponent3D(), test_volume, (n, n, n))
                 num_components = maximum(labels)
 
