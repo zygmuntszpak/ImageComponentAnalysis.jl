@@ -7,15 +7,15 @@ using OffsetArrays
 abstract type ComponentAnalysisAlgorithm end
 struct ContourTracing <: ComponentAnalysisAlgorithm end
 struct CostaOuter <: ComponentAnalysisAlgorithm end
-struct CostaInner <: ComponentAnalysisAlgorithm end
+struct MooreInner <: ComponentAnalysisAlgorithm end
 
 include("contour_tracing.jl")
 include("costa_outer.jl")
-include("costa_inner.jl")
+include("moore_inner.jl")
 
 export
     label_components,
 	ContourTracing,
 	CostaOuter,
-	CostaInner
+	MooreInner
 end # module

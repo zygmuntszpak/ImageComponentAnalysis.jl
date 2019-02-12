@@ -1,4 +1,4 @@
-function trace_boundary(#=t::MooreInner,=# labels::AbstractArray, N::Int = 0)
+function trace_boundary(t::MooreInner, labels::AbstractArray, N::Int = 0)
     println("inner")
     N = N == 0 ? maximum(labels) : N
     boundary = [Vector{CartesianIndex{2}}(undef, 0) for n = 1:N]
@@ -50,7 +50,6 @@ function trace_boundary(#=t::MooreInner,=# labels::AbstractArray, N::Int = 0)
     for n in 1:N
         boundary[n] = unique!(boundary[n])
     end
-    @show boundary
     boundary
 end
 
