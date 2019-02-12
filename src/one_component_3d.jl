@@ -50,7 +50,7 @@ function label_components(algorithm::OneComponent3D, binary_volume::AbstractArra
         enqueue!(queue, (x, y, z))
         while !isempty(queue)
           vᵢx, vᵢy, vᵢz = dequeue!(queue)
-          label_subvolume!(vᵢx, vᵢy, vᵢz, n₁, n₂, n₃, queue, labels, labelindex)
+          label_subvolume!(algorithm, vᵢx, vᵢy, vᵢz, n₁, n₂, n₃, queue, labels, labelindex)
         end
         labelindex += 1
       end
@@ -62,7 +62,7 @@ function label_components(algorithm::OneComponent3D, binary_volume::AbstractArra
 end
 
 # Label 26-connected voxels in the subvolume with the labelindex.
-function label_subvolume!(vᵢx, vᵢy, vᵢz, n₁, n₂, n₃, queue, labels, labelindex)
+function label_subvolume!(algorithm, vᵢx, vᵢy, vᵢz, n₁, n₂, n₃, queue, labels, labelindex)
 
   window_size = 0
   center = (vᵢx, vᵢy, vᵢz)
@@ -71,7 +71,7 @@ function label_subvolume!(vᵢx, vᵢy, vᵢz, n₁, n₂, n₃, queue, labels, 
   labels[vᵢx, vᵢy, vᵢz] = labelindex
 
   # Label 3 x 3 x 3 neighbourhood of center voxel.
-  for (x, y, z) = get_neighbours(1, center, (n₁, n₂, n₃))
+  for (x, y, z) = get_neighbours(algorithm, 1, center, (n₁, n₂, n₃))
     if (labels[x, y, z] == 1)
       labels[x, y, z] = -10
     end
@@ -79,7 +79,7 @@ function label_subvolume!(vᵢx, vᵢy, vᵢz, n₁, n₂, n₃, queue, labels, 
 
   # Grow window size to local window.
   while window_size != max(n₁, n₂, n₃) + 1
-    for (vx, vy, vz) = get_neighbours(window_size, center, (n₁, n₂, n₃))
+    for (vx, vy, vz) = get_neighbours(algorithm, window_size, center, (n₁, n₂, n₃))
 
       # Label object voxels with distance of window_size.
       if (labels[vx, vy, vz] == -10)
@@ -88,7 +88,7 @@ function label_subvolume!(vᵢx, vᵢy, vᵢz, n₁, n₂, n₃, queue, labels, 
         end
 
         # Label 3 x 3 x 3 neighbourhood of current object voxel.
-        for (x, y, z) = get_neighbours(1, (vx, vy, vz), (n₁, n₂, n₃), center)
+        for (x, y, z) = get_neighbours(algorithm, 1, (vx, vy, vz), (n₁, n₂, n₃), center)
           if (labels[x, y, z] == 1)
             labels[x, y, z] = -10
             if (abs(x - vᵢx) == n₁ || abs(y - vᵢy) == n₂ || abs(z - vᵢz) == n₃)
@@ -113,7 +113,7 @@ function label_subvolume!(vᵢx, vᵢy, vᵢz, n₁, n₂, n₃, queue, labels, 
 end
 
 # Get the neighbourhood of the center voxel.
-function get_neighbours(distance, center, n, truecenter = center)
+function get_neighbours(algorithm::OneComponent3D, distance, center, n, truecenter = center)
 
   neighbour_ranges = map((c, n, t) -> max(t-n,c-distance):min(t+n,c+distance), center, n, truecenter)
 

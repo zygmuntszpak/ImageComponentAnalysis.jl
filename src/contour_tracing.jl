@@ -54,24 +54,24 @@ function label_components(algorithm::ContourTracing, binary_image::AbstractArray
 
           # Assign current label, perform contour tracing and increment
           # the current label by one if it is an external contour.
-          if (external_contour_check(row, col, height, width, binary_image, labels))
+          if (external_contour_check(algorithm, row, col, height, width, binary_image, labels))
             labels[row, col] = labelindex
-            external_contour_tracing(row, col, height, width, binary_image, labels, labelindex)
+            external_contour_tracing(algorithm, row, col, height, width, binary_image, labels, labelindex)
             labelindex += 1
           end
 
           # Perform contour tracing if it is an internal contour.
-          if (internal_contour_check(row, col, height, width, binary_image))
+          if (internal_contour_check(algorithm, row, col, height, width, binary_image))
             # Assign the west neighbour's label if the current pixel is not an external contour.
             if (labels[row, col] == 0)
-              assign_west_label(row, col, height, width, labels)
+              assign_west_label(algorithm, row, col, height, width, labels)
             end
-            internal_contour_tracing(row, col, height, width, binary_image, labels)
+            internal_contour_tracing(algorithm, row, col, height, width, binary_image, labels)
           end
 
           # Assign the west neighbour's label if the current pixel is not a contour point.
           if (labels[row, col] == 0)
-            assign_west_label(row, col, height, width, labels)
+            assign_west_label(algorithm, row, col, height, width, labels)
           end
 
         end
@@ -91,74 +91,74 @@ function label_components(algorithm::ContourTracing, binary_image::AbstractArray
 end
 
 # Perform contour tracing from northeast (index 7) with current label index.
-function external_contour_tracing(row, col, height, width, binary_image, labels, labelindex)
-  contour_tracing(7, row, col, height, width, binary_image, labels, labelindex)
+function external_contour_tracing(algorithm, row, col, height, width, binary_image, labels, labelindex)
+  contour_tracing(7, algorithm, row, col, height, width, binary_image, labels, labelindex)
 end
 
 # Check if the pixel is unlabelled and the north neighbour is black and in bounds.
-function external_contour_check(row, col, height, width, binary_image, labels)
-  north_neighbour = get_north_neighbour(row, col, height, width)
+function external_contour_check(algorithm, row, col, height, width, binary_image, labels)
+  north_neighbour = get_north_neighbour(algorithm, row, col, height, width)
   if (labels[row, col] != 0) return false end
   return north_neighbour != (0, 0) && binary_image[north_neighbour...] == 0
 end
 
 # Perform contour tracing from southwest (index 3) with current pixel's label.
-function internal_contour_tracing(row, col, height, width, binary_image, labels)
-  contour_tracing(3, row, col, height, width, binary_image, labels, labels[row, col])
+function internal_contour_tracing(algorithm, row, col, height, width, binary_image, labels)
+  contour_tracing(3, algorithm, row, col, height, width, binary_image, labels, labels[row, col])
 end
 
 # Check if south neighbour is black and in bounds.
-function internal_contour_check(row, col, height, width, binary_image)
-  south_neighbour = get_south_neighbour(row, col, height, width)
+function internal_contour_check(algorithm, row, col, height, width, binary_image)
+  south_neighbour = get_south_neighbour(algorithm, row, col, height, width)
   return south_neighbour != (0, 0) && binary_image[south_neighbour...] == 0
 end
 
 # Assign the west neighbour's label if the current pixel is unlabelled.
-function assign_west_label(row, col, height, width, labels)
-  if ((west_neighbour = get_west_neighbour(row, col, height, width)) != (0, 0))
+function assign_west_label(algorithm, row, col, height, width, labels)
+  if ((west_neighbour = get_west_neighbour(algorithm, row, col, height, width)) != (0, 0))
     labels[row, col] = labels[west_neighbour...]
   end
 end
 
 # Get the neighbour to the north (index 6).
-function get_north_neighbour(row, col, height, width)
-  north_neighbour = get_neighbour(6, row, col, height, width)
+function get_north_neighbour(algorithm, row, col, height, width)
+  north_neighbour = get_neighbour(6, algorithm, row, col, height, width)
 end
 
 # Get the neighbour to the south (index 2).
-function get_south_neighbour(row, col, height, width)
-  south_neighbour = get_neighbour(2, row, col, height, width)
+function get_south_neighbour(algorithm, row, col, height, width)
+  south_neighbour = get_neighbour(2, algorithm, row, col, height, width)
 end
 
 # Get the neighbour to the west (index 4).
-function get_west_neighbour(row, col, height, width)
-  west_neighbour = get_neighbour(4, row, col, height, width)
+function get_west_neighbour(algorithm, row, col, height, width)
+  west_neighbour = get_neighbour(4, algorithm, row, col, height, width)
 end
 
 # Return a neighbour by the index or (0, 0) if out of bounds.
-function get_neighbour(index, row, col, height, width)
+function get_neighbour(index, algorithm::ContourTracing, row, col, height, width)
 
   if (1 <= index <= 3) row += 1 end
   if (3 <= index <= 5) col -= 1 end
   if (5 <= index <= 7) row -= 1 end
   if (index == 7|| 0 <= index <= 1) col += 1 end
 
-  inbounds(row, col, height, width) ? (row, col) : (0, 0)
+  inbounds(algorithm, row, col, height, width) ? (row, col) : (0, 0)
 end
 
 # Check if the current pixel is in bounds.
-function inbounds(row, col, height, width)
+function inbounds(algorithm::ContourTracing, row, col, height, width)
   return 1 <= row <= height && 1 <= col <= width
 end
 
 # Trace an external or internal contour.
-function contour_tracing(search_index, row, col, height, width, binary_image, labels, labelindex)
+function contour_tracing(search_index, algorithm, row, col, height, width, binary_image, labels, labelindex)
 
   initial_position = (row, col)
   previous_index = 0
 
   while (row, col) != (0, 0)
-    row, col, previous_index = tracer(search_index, row, col, height, width, binary_image, labels, labelindex)
+    row, col, previous_index = tracer(search_index, algorithm, row, col, height, width, binary_image, labels, labelindex)
     # Stop tracing if the tracer has returned to the starting point.
     if ((row, col) == initial_position) break end
 
@@ -168,11 +168,11 @@ function contour_tracing(search_index, row, col, height, width, binary_image, la
 end
 
 # Search the pixel's neighbours and assign labels starting from search_index.
-function tracer(search_index, row, col, height, width, binary_image, labels, labelindex)
+function tracer(search_index, algorithm, row, col, height, width, binary_image, labels, labelindex)
 
   for search_iteration = 1:8
 
-    neighbour = get_neighbour(search_index, row, col, height, width)
+    neighbour = get_neighbour(search_index, algorithm, row, col, height, width)
 
     # Look for the next neighbour if the current neighbour is out of bounds.
     if (neighbour == (0, 0))
