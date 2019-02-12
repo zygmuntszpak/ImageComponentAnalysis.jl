@@ -24,62 +24,67 @@ labels = label_components(ContourTracing(), binary_image)
 
 # Reference
 
-[1] F. Chang, C.-J. Chen, and C.-J. Lu, “A linear-time component-labeling algorithm using contour tracing technique,” Computer Vision and Image Understanding, vol. 93, no. 2, pp. 206–220, Feb. 2004. [doi:10.1016/j.cviu.2003.09.002](https://doi.org/10.1016/j.cviu.2003.09.002)
+[1] F. Chang, C.-J. Chen, and C.-J. Lu, “A linear-time component-labeling algorithm using contour tracing technique”, Computer Vision and Image Understanding, vol. 93, no. 2, pp. 206–220, Feb. 2004. [doi:10.1016/j.cviu.2003.09.002](https://doi.org/10.1016/j.cviu.2003.09.002)
 """
 function label_components(algorithm::ContourTracing, binary_image::AbstractArray)
 
-  height, width = size(binary_image)
-  add_dummy_row = false
+  @inbounds begin
+    height, width = size(binary_image)
+    add_dummy_row = false
 
-  # Check if all of the pixels are black in the first row.
-  for col = 1:width
-    if (add_dummy_row = binary_image[1, col] == 1) break end
-  end
-
-  # Add a dummy row on top if there is at least one white pixel in the first row.
-  if add_dummy_row
-    dummy_row = zeros(eltype(binary_image), (1, width))
-    binary_image = vcat(dummy_row, binary_image)
-    height += 1
-  end
-
-  labels = zeros(Int, (height, width))
-  labelindex = 1
-
-  # Assign label and perform contour checks for each white pixel.
-  for row = 1:height
+    # Check if all of the pixels are black in the first row.
     for col = 1:width
-      if (binary_image[row, col] == 1)
+      if (add_dummy_row = binary_image[1, col] == 1) break end
+    end
 
-        # Assign current label, perform contour tracing and increment
-        # the current label by one if it is an external contour.
-        if (external_contour_check(row, col, height, width, binary_image, labels))
-          labels[row, col] = labelindex
-          external_contour_tracing(row, col, height, width, binary_image, labels, labelindex)
-          labelindex += 1
-        end
+    # Add a dummy row on top if there is at least one white pixel in the first row.
+    if add_dummy_row
+      dummy_row = zeros(eltype(binary_image), (1, width))
+      binary_image = vcat(dummy_row, binary_image)
+      height += 1
+    end
 
-        # Perform contour tracing if it is an internal contour.
-        if (internal_contour_check(row, col, height, width, binary_image))
-          # Assign the west neighbour's label if the current pixel is not an external contour.
+    labels = zeros(Int, (height, width))
+    labelindex = 1
+
+    # Assign label and perform contour checks for each white pixel.
+    for row = 1:height
+      for col = 1:width
+        if (binary_image[row, col] == 1)
+
+          # Assign current label, perform contour tracing and increment
+          # the current label by one if it is an external contour.
+          if (external_contour_check(row, col, height, width, binary_image, labels))
+            labels[row, col] = labelindex
+            external_contour_tracing(row, col, height, width, binary_image, labels, labelindex)
+            labelindex += 1
+          end
+
+          # Perform contour tracing if it is an internal contour.
+          if (internal_contour_check(row, col, height, width, binary_image))
+            # Assign the west neighbour's label if the current pixel is not an external contour.
+            if (labels[row, col] == 0)
+              assign_west_label(row, col, height, width, labels)
+            end
+            internal_contour_tracing(row, col, height, width, binary_image, labels)
+          end
+
+          # Assign the west neighbour's label if the current pixel is not a contour point.
           if (labels[row, col] == 0)
             assign_west_label(row, col, height, width, labels)
           end
-          internal_contour_tracing(row, col, height, width, binary_image, labels)
-        end
 
-        # Assign the west neighbour's label if the current pixel is not a contour point.
-        if (labels[row, col] == 0)
-          assign_west_label(row, col, height, width, labels)
         end
-
       end
     end
-  end
 
-  # Remove the dummy row if it was added.
-  if add_dummy_row
-    labels = labels[2:end, :]
+    # Remove the dummy row if it was added.
+    if add_dummy_row
+      labels = labels[2:end, :]
+    end
+
+    # Set all background pixels to 0.
+    replace!(labels, -1 => 0)
   end
 
   labels
