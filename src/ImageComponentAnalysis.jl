@@ -1,6 +1,7 @@
 module ImageComponentAnalysis
 
-using Images, IndexedTables, JuliaDBMeta, LinearAlgebra
+
+using Images, IndexedTables, JuliaDBMeta, LinearAlgebra, OffsetArrays, StaticArrays, DataStructures
 
 abstract type MeasurementProperties end
 
@@ -31,7 +32,15 @@ RegionEllipse(; semi_axes::Bool = true, orientation::Bool = true, eccentricity::
 
 
 abstract type ComponentAnalysisAlgorithm end
+struct OneComponent2D <: ComponentAnalysisAlgorithm end
+struct OneComponent3D <: ComponentAnalysisAlgorithm end
 struct ContourTracing <: ComponentAnalysisAlgorithm end
+struct CostaOuter <: ComponentAnalysisAlgorithm end
+struct MooreInner <: ComponentAnalysisAlgorithm end
+
+abstract type Connectivity end
+struct FourConnected <: Connectivity end
+struct EightConnected <: Connectivity end
 
 include("boundingbox.jl")
 include("measurement.jl")
@@ -39,6 +48,10 @@ include("basic_topology.jl")
 include("region_ellipse.jl")
 include("measure_components.jl")
 include("contour_tracing.jl")
+include("costa_outer.jl")
+include("moore_inner.jl")
+include("one_component_2d.jl")
+include("one_component_3d.jl")
 
 export
 	BoundingBox,
@@ -46,6 +59,12 @@ export
 	BasicTopology,
 	RegionEllipse,
 	measure_components,
-    label_components,
-	ContourTracing
+  label_components,
+  ContourTracing,
+	FourConnected,
+	EightConnected,
+	OneComponent2D,
+  OneComponent3D,
+	CostaOuter,
+	MooreInner
 end # module
