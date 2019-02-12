@@ -56,7 +56,7 @@ function label_components(algorithm::OneComponent2D, binary_image::AbstractArray
         # Pop an element and search its neighbours until the queue is empty.
         while length(queue) != 0
           (neighbour_row, neighbour_col) = pop!(queue)
-          search_neighbour(neighbour_row, neighbour_col, height, width, binary_image, labels, labelindex, queue, neighbourhood)
+          search_neighbour(algorithm, neighbour_row, neighbour_col, height, width, binary_image, labels, labelindex, queue, neighbourhood)
         end
       end
     end
@@ -65,9 +65,9 @@ function label_components(algorithm::OneComponent2D, binary_image::AbstractArray
 end
 
 # Search a pixel's neighbour using the connectivity specified.
-function search_neighbour(row, col, height, width, binary_image, labels, labelindex, queue, neighbourhood)
+function search_neighbour(algorithm, row, col, height, width, binary_image, labels, labelindex, queue, neighbourhood)
   for search_index = 1:neighbourhood
-    if ((neighbour = get_neighbour(search_index, row, col, height, width)) != (0, 0))
+    if ((neighbour = get_neighbour(algorithm, search_index, row, col, height, width)) != (0, 0))
       # Assign label to an unlabelled white pixel and push it to the queue.
       if (binary_image[neighbour...] == 1 && labels[neighbour...] == 0)
         labels[neighbour...] = labelindex
@@ -78,18 +78,18 @@ function search_neighbour(row, col, height, width, binary_image, labels, labelin
 end
 
 # Return a neighbour by the index or (0, 0) if out of bounds.
-function get_neighbour(index, row, col, height, width)
+function get_neighbour(algorithm::OneComponent2D, index, row, col, height, width)
 
   if (index in @SVector [1, 5, 6]) row -= 1 end
   if (index in @SVector [2, 6, 7]) col += 1 end
   if (index in @SVector [3, 7, 8]) row += 1 end
   if (index in @SVector [4, 5, 8]) col -= 1 end
 
-  inbounds(row, col, height, width) ? (row, col) : (0, 0)
+  inbounds(algorithm, row, col, height, width) ? (row, col) : (0, 0)
 end
 
 # Check if the current pixel is in bounds.
-function inbounds(row, col, height, width)
+function inbounds(algorithm, row, col, height, width)
   return 1 <= row <= height && 1 <= col <= width
 end
 
