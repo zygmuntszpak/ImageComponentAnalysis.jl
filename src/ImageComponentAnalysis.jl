@@ -2,19 +2,20 @@ module ImageComponentAnalysis
 
 using Images
 using PaddedViews
+using OffsetArrays
 
 abstract type ComponentAnalysisAlgorithm end
 struct ContourTracing <: ComponentAnalysisAlgorithm end
-struct MooreTracing <: ComponentAnalysisAlgorithm end
-struct OuterTracing <: ComponentAnalysisAlgorithm end
+struct CostaOuter <: ComponentAnalysisAlgorithm end
+struct CostaInner <: ComponentAnalysisAlgorithm end
 
 include("contour_tracing.jl")
-include("moore_tracing.jl")
-include("outer_tracing.jl")
+include("costa_outer.jl")
+include("costa_inner.jl")
 
 export
     label_components,
 	ContourTracing,
-	MooreTracing,
-	OuterTracing
+	CostaOuter,
+	CostaInner
 end # module
