@@ -3,6 +3,9 @@ module ImageComponentAnalysis
 
 using Images, IndexedTables, JuliaDBMeta, OffsetArrays, StaticArrays, DataStructures
 
+# Used in generic_labelling.jl to allow @nexprs macros.
+using Base.Cartesian
+
 abstract type MeasurementProperties end
 
 struct Measurement <: MeasurementProperties
@@ -30,13 +33,24 @@ struct RegionEllipse <: MeasurementProperties
 end
 RegionEllipse(; semi_axes::Bool = true, orientation::Bool = true, eccentricity::Bool = true, centroid::Bool = true) = RegionEllipse(centroid, semi_axes, orientation, eccentricity)
 
+struct Boundary <: MeasurementProperties
+	inner::Bool
+	outer::Bool
+	#holes_inner::Bool
+	#holes_outer::Bool
+end
+Boundary(; inner::Bool = true, outer::Bool = true) = Boundary(inner, outer)
 
-abstract type ComponentAnalysisAlgorithm end
-struct OneComponent2D <: ComponentAnalysisAlgorithm end
-struct OneComponent3D <: ComponentAnalysisAlgorithm end
-struct ContourTracing <: ComponentAnalysisAlgorithm end
-struct CostaOuter <: ComponentAnalysisAlgorithm end
-struct MooreInner <: ComponentAnalysisAlgorithm end
+
+abstract type ComponentLabellingAlgorithm end
+struct OneComponent2D <: ComponentLabellingAlgorithm end
+struct OneComponent3D <: ComponentLabellingAlgorithm end
+struct Generic <: ComponentLabellingAlgorithm end
+struct ContourTracing <: ComponentLabellingAlgorithm end
+
+abstract type TracingAlgorithm end
+struct CostaOuter <: TracingAlgorithm end
+struct MooreInner <: TracingAlgorithm end
 
 abstract type Connectivity end
 struct FourConnected <: Connectivity end
@@ -46,14 +60,17 @@ include("boundingbox.jl")
 include("measurement.jl")
 include("basic_topology.jl")
 include("region_ellipse.jl")
+include("boundary.jl")
 include("measure_components.jl")
 include("contour_tracing.jl")
 include("costa_outer.jl")
 include("moore_inner.jl")
 include("one_component_2d.jl")
 include("one_component_3d.jl")
+include("generic_labelling.jl")
 
 export
+	Boundary,
 	BoundingBox,
 	Measurement,
 	BasicTopology,
@@ -65,6 +82,7 @@ export
 	EightConnected,
 	OneComponent2D,
     OneComponent3D,
+	Generic,
 	trace_boundary,
 	CostaOuter,
 	MooreInner

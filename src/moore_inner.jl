@@ -1,5 +1,4 @@
 function trace_boundary(t::MooreInner, labels::AbstractArray, N::Int = 0)
-    println("inner")
     N = N == 0 ? maximum(labels) : N
     boundary = [Vector{CartesianIndex{2}}(undef, 0) for n = 1:N]
     # By padding we will avoid having to do out-of-bounds checking when we
@@ -46,7 +45,10 @@ function trace_boundary(t::MooreInner, labels::AbstractArray, N::Int = 0)
             end
         end
     end
-    unique!.(boundary[n])
+    for n = 1:N
+        unique!(boundary[n])
+    end
+    boundary
 end
 
 function find_second_inner(p, N₈, labels, l, stroke_direction)
@@ -75,6 +77,5 @@ function find_next_inner(p, previous, N₈, labels, l, stroke_direction)
             break
         end
     end
-
     pₙ₊₁, stroke_direction[current]
 end
