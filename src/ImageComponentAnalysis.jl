@@ -65,6 +65,7 @@ export
 	EightConnected,
 	OneComponent2D,
     OneComponent3D,
+	trace_boundary,
 	CostaOuter,
 	MooreInner
 end # module
