@@ -1,6 +1,5 @@
 module ImageComponentAnalysis
 
-
 using Images, IndexedTables, JuliaDBMeta, OffsetArrays, StaticArrays, DataStructures
 
 abstract type MeasurementProperties end
@@ -59,12 +58,12 @@ export
 	BasicTopology,
 	RegionEllipse,
 	measure_components,
-    label_components,
-    ContourTracing,
+	label_components,
+	ContourTracing,
 	FourConnected,
 	EightConnected,
 	OneComponent2D,
-    OneComponent3D,
+	OneComponent3D,
 	trace_boundary,
 	CostaOuter,
 	MooreInner

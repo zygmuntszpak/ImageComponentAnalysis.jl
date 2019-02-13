@@ -72,7 +72,7 @@ test_volume_16 = cat(_white_surface_7, _border_voxels_7, _cube_slices, _border_v
 # Cube in cube in cube
 _white_surface_9 = ones(Int, 9, 9)
 _border_voxels_9 = [1 1 1 1 1 1 1 1 1; 1 0 0 0 0 0 0 0 1; 1 0 0 0 0 0 0 0 1; 1 0 0 0 0 0 0 0 1; 1 0 0 0 0 0 0 0 1; 1 0 0 0 0 0 0 0 1; 1 0 0 0 0 0 0 0 1; 1 0 0 0 0 0 0 0 1; 1 1 1 1 1 1 1 1 1]
-_test_volume_17 = cat(_white_surface_9, _border_voxels_9,  _border_voxels_9, _border_voxels_9, _border_voxels_9, _border_voxels_9, _border_voxels_9, _border_voxels_9, _white_surface_9; dims = 3)
+_test_volume_17 = cat(_white_surface_9, _border_voxels_9, _border_voxels_9, _border_voxels_9, _border_voxels_9, _border_voxels_9, _border_voxels_9, _border_voxels_9, _white_surface_9; dims = 3)
 _test_volume_17[3:7, 3:7, 3:7] = test_volume_14
 test_volume_17 = _test_volume_17
 
