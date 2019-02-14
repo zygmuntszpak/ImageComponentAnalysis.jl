@@ -1,5 +1,5 @@
 using ImageComponentAnalysis
-using Test, Images, JuliaDBMeta, IndexedTables, JuliaDBMeta
+using Test, Images, JuliaDBMeta, IndexedTables
 
 @testset "ImageComponentAnalysis.jl" begin
     include("test_images.jl")

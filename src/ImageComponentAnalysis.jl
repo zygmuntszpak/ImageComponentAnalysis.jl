@@ -1,6 +1,5 @@
 module ImageComponentAnalysis
 
-
 using Images, IndexedTables, JuliaDBMeta, OffsetArrays, StaticArrays, DataStructures
 
 # Used in generic_labelling.jl to allow @nexprs macros.
@@ -76,12 +75,12 @@ export
 	BasicTopology,
 	RegionEllipse,
 	measure_components,
-    label_components,
-    ContourTracing,
+	label_components,
+	ContourTracing,
 	FourConnected,
 	EightConnected,
 	OneComponent2D,
-    OneComponent3D,
+  OneComponent3D,
 	Generic,
 	trace_boundary,
 	CostaOuter,
