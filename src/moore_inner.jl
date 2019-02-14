@@ -1,5 +1,4 @@
-function trace_boundary(#=t::MooreInner,=# labels::AbstractArray, N::Int = 0)
-    println("inner")
+function trace_boundary(t::MooreInner, labels::AbstractArray, N::Int = 0)
     N = N == 0 ? maximum(labels) : N
     boundary = [Vector{CartesianIndex{2}}(undef, 0) for n = 1:N]
     # By padding we will avoid having to do out-of-bounds checking when we
@@ -12,7 +11,6 @@ function trace_boundary(#=t::MooreInner,=# labels::AbstractArray, N::Int = 0)
     # 5 6 7
     N₈ = OffsetVector(CartesianIndex.([(0, 1), (-1, 1), (-1, 0), (-1, -1), (0, -1), (1, -1), (1, 0), (1, 1)]), 0:7)
     stroke_direction = OffsetVector([6, 6, 0, 0, 2, 2, 4, 4], 0:7)
-    # TODO foundfirst instead of isfirst
     isfirst = fill(true, N)
     # CartesianIndices(labels) will loop over the "interior" of labels_padded.
     for p in CartesianIndices(labels)
@@ -25,11 +23,10 @@ function trace_boundary(#=t::MooreInner,=# labels::AbstractArray, N::Int = 0)
             # Jacobs stopping criteria. Once we trace around the contour we
             # will have included the true "first" boundary point anyway.
             p₁, direction₁  = find_second_inner(p, N₈, labels_padded, l, stroke_direction)
-
             # In this instance the component must just be a single pixel so there is nothing to trace.
             if p₁ == p
                 push!(boundary[l], p₁)
-                break
+                continue
             end
 
             push!(boundary[l], p₁)
@@ -47,11 +44,7 @@ function trace_boundary(#=t::MooreInner,=# labels::AbstractArray, N::Int = 0)
             end
         end
     end
-    for n in 1:N
-        boundary[n] = unique!(boundary[n])
-    end
-    @show boundary
-    boundary
+    unique!.(boundary)
 end
 
 function find_second_inner(p, N₈, labels, l, stroke_direction)
@@ -80,6 +73,5 @@ function find_next_inner(p, previous, N₈, labels, l, stroke_direction)
             break
         end
     end
-
     pₙ₊₁, stroke_direction[current]
 end

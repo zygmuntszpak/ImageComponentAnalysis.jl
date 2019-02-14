@@ -1,6 +1,6 @@
 # Based on the the "Contour Following Algorithm" described in Chapter 5 of
 # Costa, L., Cesar, Jr., R., Laplante, P. (2009). Shape Classification and Analysis. Boca Raton: CRC Press, https://doi.org/10.1201/9780849379406
-function trace_boundary(#=t::CostaOuter,=# labels::AbstractArray, N::Int = 0)
+function trace_boundary(t::CostaOuter, labels::AbstractArray, N::Int = 0)
     N = N == 0 ? maximum(labels) : N
     boundary = [Vector{CartesianIndex{2}}(undef, 0) for n = 1:N]
     # By padding we will avoid having to do out-of-bounds checking when we
@@ -30,7 +30,6 @@ function trace_boundary(#=t::CostaOuter,=# labels::AbstractArray, N::Int = 0)
             end
         end
     end
-    @show boundary
     boundary
 end
 
