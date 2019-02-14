@@ -23,11 +23,10 @@ function trace_boundary(t::MooreInner, labels::AbstractArray, N::Int = 0)
             # Jacobs stopping criteria. Once we trace around the contour we
             # will have included the true "first" boundary point anyway.
             p₁, direction₁  = find_second_inner(p, N₈, labels_padded, l, stroke_direction)
-
             # In this instance the component must just be a single pixel so there is nothing to trace.
             if p₁ == p
                 push!(boundary[l], p₁)
-                break
+                continue
             end
 
             push!(boundary[l], p₁)
@@ -45,10 +44,7 @@ function trace_boundary(t::MooreInner, labels::AbstractArray, N::Int = 0)
             end
         end
     end
-    for n = 1:N
-        unique!(boundary[n])
-    end
-    boundary
+    unique!.(boundary)
 end
 
 function find_second_inner(p, N₈, labels, l, stroke_direction)
