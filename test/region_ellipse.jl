@@ -16,7 +16,7 @@
             if i > 1
                 semi_axes = select(t,:semi_axes)
                 a = first.(collect(semi_axes)) * 2
-                @test all(isapprox(a, test_image_minor_axes_lengths[i]; atol = 5))
+                @test all(isapprox(a, test_image_minor_axes_lengths[i]; atol = 1e-5))
             end
         end
     end
@@ -40,7 +40,7 @@ end
             if i > 1
                 semi_axes = select(t,:semi_axes)
                 b = last.(collect(semi_axes)) * 2
-                @test all(isapprox(b, test_image_major_axes_lengths[i]; atol = 5))
+                @test all(isapprox(b, test_image_major_axes_lengths[i]; atol = 1e-5))
             end
         end
     end
@@ -72,45 +72,65 @@ end
             if i > 1
                 semi_axes = select(t,:centroid)
                 c = collect.(semi_axes)
-                @test all(isapprox(c, collect.(test_image_centroids[i]); atol = 5))
+                @test all(isapprox(c, collect.(test_image_centroids[i]); atol = 1e-5))
             end
         end
     end
 end
 
-# TODO Revisit tests once we change the convention with which we represent the
-# ellipse orientation. 
+@testset "eccentricity" begin
+
+    test_ellipse_image_eccentricities = ([3.650024149988857e-8],
+                                         [0.7323338372368249],
+                                         [0.8694282672026615],
+                                         [5.960464477539063e-8],
+                                         [0.9428090415820629])
+
+    for T in (Int, Bool, Gray{Bool}, Gray{N0f8}, Gray{N0f16}, Gray{N0f32}, Gray{Float64})
+        j = 1
+        for i = 10:14
+            test_image = eval(Symbol("test_ellipse_$(i)"))
+            labels = Images.label_components(test_image,trues(3,3))
+            t = measure_components((RegionEllipse(),), labels)
+            e = select(t,:eccentricity)
+            @test isapprox(e, test_ellipse_image_eccentricities[j]; atol = 1e-5)
+            j += 1
+        end
+    end
+end
+
+
+# # TODO Revisit tests once we change the convention with which we represent the
+# # ellipse orientation.
 # @testset "ellipse orientation" begin
 #
-#     test_image_orientations = ([0], [0],
-#                         [0],
-#                         [0, 0, 0, 0],
-#                         [0],
-#                         [0], [0],
-#                         [0], [90],
-#                         [0],
-#                         [0], [0],
-#                         [45], [-45],
-#                         [0],
-#                         [6.595305, 0, 0],
-#                         [85.571021],
-#                         [38.523618 , -28.997308],
-#                         [90.000000 , 90.000000],
-#                         [-2.443658, -62.871225])
+#     # test_image_orientations = ([0], [0],
+#     #                     [0],
+#     #                     [0, 0, 0, 0],
+#     #                     [0],
+#     #                     [0], [0],
+#     #                     [0], [90],
+#     #                     [0],
+#     #                     [0], [0],
+#     #                     [45], [-45],
+#     #                     [0],
+#     #                     [6.595305, 0, 0],
+#     #                     [85.571021],
+#     #                     [38.523618 , -28.997308],
+#     #                     [90.000000 , 90.000000],
+#     #                     [-2.443658, -62.871225])
 #
 #     for T in (Int, Bool, Gray{Bool}, Gray{N0f8}, Gray{N0f16}, Gray{N0f32}, Gray{Float64})
-#         for i = 1:20
-#             test_image = eval(Symbol("test_image_$(i)"))
+#         for i = 1:9
+#             test_image = eval(Symbol("test_ellipse_$(i)"))
 #             labels = Images.label_components(test_image,trues(3,3))
 #             t = measure_components((RegionEllipse(),), labels)
-#             if i > 1
-#                 θ = select(t,:orientation)
-#                 println(" $i => ")
-#                 Base.display(θ)
-#                 Base.display(test_image_orientations[i])
-#                 println(" \n ")
-#                 #@test all(isapprox(θ, test_image_orientations[i]); atol = 5)
-#             end
+#             θ = select(t,:orientation)
+#             println(" $i => ")
+#             Base.display(θ)
+#             #Base.display(test_image_orientations[i])
+#             println(" \n ")
+#             #@test all(isapprox(θ, test_image_orientations[i]); atol = 5)
 #         end
 #     end
 # end
