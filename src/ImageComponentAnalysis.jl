@@ -67,6 +67,8 @@ include("moore_inner.jl")
 include("one_component_2d.jl")
 include("one_component_3d.jl")
 include("generic_labelling.jl")
+include("separate_utility.jl")
+include("separate_components.jl")
 
 export
     Boundary,
@@ -76,6 +78,10 @@ export
     RegionEllipse,
     measure_components,
     label_components,
+    get_endpoints,
+    join_line_segments,
+    separate_components,
+    label_separate_components,
     ContourTracing,
     FourConnected,
     EightConnected,
