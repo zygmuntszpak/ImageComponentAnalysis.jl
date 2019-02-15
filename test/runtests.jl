@@ -12,4 +12,6 @@ using Test, Images, JuliaDBMeta, IndexedTables, JuliaDBMeta
     include("one_component_3d.jl")
     include("basic_topology.jl")
     include("region_ellipse.jl")
+    include("costa_outer.jl")
+    include("moore_inner.jl")
 end
