@@ -29,7 +29,7 @@
     N = 2
     t3 = trace_boundary(CostaOuter(), labels, N)
     expected_result_t3 = [[(2, 1), (3, 2), (3, 3), (3, 4), (3, 5), (2, 6), (1, 5), (1, 4), (1, 3), (1, 2)],
-                           (4, 1), (5, 2), (5, 3), (5, 4), (5, 5), (4, 6), (3, 5), (3, 4), (3, 3), (3, 2)]
+                          [(4, 1), (5, 2), (5, 3), (5, 4), (5, 5), (4, 6), (3, 5), (3, 4), (3, 3), (3, 2)]]
     @test compare(expected_result_t3, t3, N) == true
 
     labels = [0 0 0 0 0 0;
@@ -83,7 +83,7 @@
     expected_result_t8 = [[(1,0), (2,0), (3,0), (4,0), (5,1), (5,2), (5,3), (5,4), (4,5), (3,5), (2,5), (1,5), (0,4), (0,3), (0,2), (0,1)]]
     @test compare(expected_result_t8, t8, N) == true
 
-    using OffsetArrays, Images
+
     labels = [1 0 1 0 1;
               0 1 0 1 0;
               1 0 1 0 1;
@@ -91,19 +91,6 @@
     N = 1
     t9 = trace_boundary(CostaOuter(), labels, N)
     expected_result_t9 = [[(1,0), (2,1), (1,2), (0,1)]]
-    @test_broken compare(expected_result_t9, t9, N) == true
+    @test_broken compare(expected_result_t9, t9, N) == false
 
-end
-
-function compare(expected_result, test, N)
-    for i in 1:N
-        for a in CartesianIndices(test[i])
-            tupleindex = test[i][a]
-            tupleindex = Tuple(tupleindex)
-            if tupleindex != expected_result[i][a]
-                return false
-            end
-        end
-    end
-    return true
 end
