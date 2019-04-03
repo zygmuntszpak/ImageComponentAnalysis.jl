@@ -44,7 +44,7 @@ function trace_boundary(t::MooreInner, labels::AbstractArray, N::Int = 0)
             end
         end
     end
-    unique!.(boundary)
+    boundary
 end
 
 function find_second_inner(p, N₈, labels, l, stroke_direction)
