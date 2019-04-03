@@ -8,35 +8,35 @@ using Base.Cartesian
 abstract type MeasurementProperties end
 
 struct Measurement <: MeasurementProperties
-	area::Bool
-	perimeter::Bool
+    area::Bool
+    perimeter::Bool
 end
 Measurement(; area::Bool = true, perimeter::Bool = true) = Measurement(area, perimeter)
 
 struct BoundingBox <: MeasurementProperties
-	box_area::Bool
+    box_area::Bool
 end
 BoundingBox(; box_area::Bool = true) = BoundingBox(box_area)
 
 struct BasicTopology <: MeasurementProperties
-	holes::Bool
-	euler_number::Bool
+    holes::Bool
+    euler_number::Bool
 end
 BasicTopology(; holes::Bool = true, euler_number::Bool = true) = BasicTopology(holes, euler_number)
 
 struct RegionEllipse <: MeasurementProperties
-	centroid::Bool
-	semi_axes::Bool
-	orientation::Bool
-	eccentricity::Bool
+    centroid::Bool
+    semi_axes::Bool
+    orientation::Bool
+    eccentricity::Bool
 end
 RegionEllipse(; semi_axes::Bool = true, orientation::Bool = true, eccentricity::Bool = true, centroid::Bool = true) = RegionEllipse(centroid, semi_axes, orientation, eccentricity)
 
 struct Boundary <: MeasurementProperties
-	inner::Bool
-	outer::Bool
-	#holes_inner::Bool
-	#holes_outer::Bool
+    inner::Bool
+    outer::Bool
+    #holes_inner::Bool
+    #holes_outer::Bool
 end
 Boundary(; inner::Bool = true, outer::Bool = true) = Boundary(inner, outer)
 
@@ -67,22 +67,28 @@ include("moore_inner.jl")
 include("one_component_2d.jl")
 include("one_component_3d.jl")
 include("generic_labelling.jl")
+include("separate_utility.jl")
+include("separate_components.jl")
 
 export
-	Boundary,
-	BoundingBox,
-	Measurement,
-	BasicTopology,
-	RegionEllipse,
-	measure_components,
-	label_components,
-	ContourTracing,
-	FourConnected,
-	EightConnected,
-	OneComponent2D,
-  OneComponent3D,
-	Generic,
-	trace_boundary,
-	CostaOuter,
-	MooreInner
+    Boundary,
+    BoundingBox,
+    Measurement,
+    BasicTopology,
+    RegionEllipse,
+    measure_components,
+    label_components,
+    get_endpoints,
+    join_line_segments,
+    separate_components,
+    label_separate_components,
+    ContourTracing,
+    FourConnected,
+    EightConnected,
+    OneComponent2D,
+    OneComponent3D,
+    Generic,
+    trace_boundary,
+    CostaOuter,
+    MooreInner
 end # module

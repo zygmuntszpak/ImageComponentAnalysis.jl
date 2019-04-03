@@ -23,6 +23,7 @@ end
     include("one_component_3d.jl")
     include("basic_topology.jl")
     include("region_ellipse.jl")
+    include("separate_components.jl")
     include("costa_outer.jl")
     include("moore_inner.jl")
 end
