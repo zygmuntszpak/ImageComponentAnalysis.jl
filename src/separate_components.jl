@@ -46,7 +46,7 @@ Returns a two-dimensional array that represents the joined thinned image.
 
 See [`separate_components`](@ref) for more details.
 """
-function join_line_segments(thinned_image::AbstractArray; prolongation_length::Int = 50, search_radius::Int = 3, calculation_length::Int = 15)
+function join_line_segments(thinned_image::AbstractArray; prolongation_length::Integer = 50, search_radius::Integer = 3, calculation_length::Integer = 15)
     @inbounds begin
         endpoints = get_endpoints(thinned_image)
         links = link_endpoints(thinned_image, endpoints, prolongation_length, search_radius, calculation_length)
@@ -88,7 +88,7 @@ The maximum length for calculating the direction from an endpoint.
 
 [1] M. Faessel, and F. Courtois, “Touching grain kernel separation by gap-filling”, Image Analysis and Stereology, vol. 28, no. 3, pp. 195-203, Nov. 2009. [doi:10.5566/ias.v28.p195-203](https://doi.org/10.5566/ias.v28.p195-203)
 """
-function separate_components(binary_image::AbstractArray; prolongation_length::Int = 50, search_radius::Int = 3, calculation_length::Int = 15)
+function separate_components(binary_image::AbstractArray; prolongation_length::Integer = 50, search_radius::Integer = 3, calculation_length::Integer = 15)
     @inbounds begin
         thinned_image = thinning(.!Bool.(binary_image))
         endpoints = get_endpoints(thinned_image)
@@ -105,9 +105,10 @@ label_separate_components(binary_image)
 
 Same as [`separate_components`](@ref) except that it further computes the connected components using 4-connectivity.
 """
-function label_separate_components(binary_image::AbstractArray; prolongation_length::Int = 50, search_radius::Int = 3, calculation_length::Int = 15)
+function label_separate_components(binary_image::AbstractArray; prolongation_length::Integer = 50, search_radius::Integer = 3, calculation_length::Integer = 15)
     @inbounds begin
         separated_components = separate_components(binary_image; prolongation_length = prolongation_length, search_radius = search_radius, calculation_length = calculation_length)
-        label_components(OneComponent2D(), separated_components, FourConnected())
+        #label_components(OneComponent2D(), separated_components, FourConnected())
+        label_components(Generic(), separated_components, [false true false; true true true; false true false])
     end
 end

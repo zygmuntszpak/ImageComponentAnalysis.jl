@@ -7,11 +7,12 @@ function measure_components(properties::Tuple{MeasurementProperties, Vararg{Meas
     t = usecodes ? append_bitcodes(t, labels, N) : t
     for i = 1:length(properties)
         t = measure_feature(properties[i], t, labels, N)
+        Base.display(t)
     end
     t
 end
 
-function append_bitcodes(t::IndexedTable, labels::AbstractArray,N::Int)
+function append_bitcodes(t::IndexedTable, labels::AbstractArray, N::Int)
     # Stores counts of Bit Quad patterns for each component.
     𝓠₀ = zeros(Int, N)
     𝓠₁ = zeros(Int, N)
@@ -23,7 +24,7 @@ function append_bitcodes(t::IndexedTable, labels::AbstractArray,N::Int)
     labels_padded = padarray(labels, Fill(0, (2,2)))
     rows, cols = axes(labels_padded)
     for r = first(rows):last(rows)-1
-        for c = first(rows):last(rows)-1
+        for c = first(cols):last(cols)-1
             for n = 1:N
                 p₁ = labels_padded[r, c] == n ? 1 : 0
                 p₂ = labels_padded[r + 1, c] == n ? 1 : 0
