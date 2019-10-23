@@ -5,7 +5,7 @@
            0 1 1 0 0;
            0 0 0 0 0]
 
-    labels  = Images.label_components(img,trues(3,3))
+    labels  = label_components(Generic(), img, trues(3,3))
     t = measure_components((Measurement(),), labels)
     @test length(t) == 1
 
@@ -20,7 +20,7 @@
     for T in (Int, Bool, Gray{Bool}, Gray{N0f8}, Gray{N0f16}, Gray{N0f32}, Gray{Float64})
         for i = 1:20
             test_image = eval(Symbol("test_image_$(i)"))
-            labels = Images.label_components(test_image,trues(3,3))
+            labels = label_components(Generic(), test_image, trues(3,3))
             t = measure_components((Measurement(),), labels)
             i == 1 ? (@test isempty(t)) : (@test all(select(t,:area) .== test_image_areas[i]))
         end
@@ -37,7 +37,7 @@ end
     for T in (Int, Bool, Gray{Bool}, Gray{N0f8}, Gray{N0f16}, Gray{N0f32}, Gray{Float64})
         for i = 1:20
             test_image = eval(Symbol("test_image_$(i)"))
-            labels = Images.label_components(test_image,trues(3,3))
+            labels = label_components(Generic(), test_image, trues(3,3))
             t = measure_components((Measurement(),), labels)
             i == 1 ? (@test isempty(t)) : (@test all(select(t,:perimeter₁) .== test_image_perimeters[i]))
         end

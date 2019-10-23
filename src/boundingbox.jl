@@ -17,7 +17,6 @@ function measure_feature(property::BoundingBox, t::IndexedTable, labels::Abstrac
     coords_matrix = reshape(reinterpret(StepRange{Int,Int},coords),(2,N))
     t = pushcol(t, :r => view(coords_matrix,1,:), :c => view(coords_matrix,2,:))
     fill_properties(property, t)
-
 end
 
 function fill_properties(property::BoundingBox, t::IndexedTable)

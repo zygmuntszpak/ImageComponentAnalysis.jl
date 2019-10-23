@@ -11,7 +11,7 @@
     for T in (Int, Bool, Gray{Bool}, Gray{N0f8}, Gray{N0f16}, Gray{N0f32}, Gray{Float64})
         for i = 1:20
             test_image = eval(Symbol("test_image_$(i)"))
-            labels = Images.label_components(test_image,trues(3,3))
+            labels = label_components(Generic(), test_image,trues(3,3))
             t = measure_components((RegionEllipse(),), labels)
             if i > 1
                 semi_axes = select(t,:semi_axes)
@@ -35,7 +35,7 @@ end
     for T in (Int, Bool, Gray{Bool}, Gray{N0f8}, Gray{N0f16}, Gray{N0f32}, Gray{Float64})
         for i = 1:20
             test_image = eval(Symbol("test_image_$(i)"))
-            labels = Images.label_components(test_image,trues(3,3))
+            labels = label_components(Generic(), test_image,trues(3,3))
             t = measure_components((RegionEllipse(),), labels)
             if i > 1
                 semi_axes = select(t,:semi_axes)
@@ -67,7 +67,7 @@ end
     for T in (Int, Bool, Gray{Bool}, Gray{N0f8}, Gray{N0f16}, Gray{N0f32}, Gray{Float64})
         for i = 1:20
             test_image = eval(Symbol("test_image_$(i)"))
-            labels = Images.label_components(test_image,trues(3,3))
+            labels = label_components(Generic(), test_image,trues(3,3))
             t = measure_components((RegionEllipse(),), labels)
             if i > 1
                 semi_axes = select(t,:centroid)
@@ -90,7 +90,7 @@ end
         j = 1
         for i = 10:14
             test_image = eval(Symbol("test_ellipse_$(i)"))
-            labels = Images.label_components(test_image,trues(3,3))
+            labels = label_components(Generic(), test_image,trues(3,3))
             t = measure_components((RegionEllipse(),), labels)
             e = select(t,:eccentricity)
             @test isapprox(e, test_ellipse_image_eccentricities[j]; atol = 1e-5)

@@ -10,10 +10,10 @@ end
 
 function compute_inner_contour(t::IndexedTable, labels::AbstractArray)
     boundaries = trace_boundary(MooreInner(), labels)
-    t = pushcol(t, :inner_boundary => boundaries)
+    t = transform(t, :inner_boundary => boundaries)
 end
 
 function compute_outer_contour(t::IndexedTable, labels::AbstractArray)
     boundaries = trace_boundary(CostaOuter(), labels)
-    t = pushcol(t, :outer_boundary => boundaries)
+    t = transform(t, :outer_boundary => boundaries)
 end

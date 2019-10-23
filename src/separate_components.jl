@@ -108,7 +108,7 @@ Same as [`separate_components`](@ref) except that it further computes the connec
 function label_separate_components(binary_image::AbstractArray; prolongation_length::Integer = 50, search_radius::Integer = 3, calculation_length::Integer = 15)
     @inbounds begin
         separated_components = separate_components(binary_image; prolongation_length = prolongation_length, search_radius = search_radius, calculation_length = calculation_length)
-        #label_components(OneComponent2D(), separated_components, FourConnected())
+        # Label components using 4-connectivity
         label_components(Generic(), separated_components, [false true false; true true true; false true false])
     end
 end

@@ -1,5 +1,6 @@
 using ImageComponentAnalysis
-using Test, Images, JuliaDBMeta, IndexedTables
+using Test, ImageCore, ImageMorphology, JuliaDBMeta, IndexedTables, StaticArrays
+const label_components = ImageComponentAnalysis.label_components
 
 function compare(expected_result, test, N)
     for n in 1:N
@@ -26,4 +27,5 @@ end
     include("separate_components.jl")
     include("costa_outer.jl")
     include("moore_inner.jl")
+    include("minimum_oriented_bounding_box.jl")
 end

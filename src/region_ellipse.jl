@@ -21,7 +21,7 @@ function measure_feature(property::RegionEllipse, t::IndexedTable, labels::Abstr
             ℳ₀₂[l] += y^2 + 1/12
         end
     end
-    t = pushcol(t, :M₀₀ => ℳ₀₀, :M₁₀ => ℳ₁₀, :M₀₁ => ℳ₀₁, :M₁₁ => ℳ₁₁, :M₂₀ => ℳ₂₀, :M₀₂ => ℳ₀₂)
+    t = transform(t, :M₀₀ => ℳ₀₀, :M₁₀ => ℳ₁₀, :M₀₁ => ℳ₀₁, :M₁₁ => ℳ₁₁, :M₂₀ => ℳ₂₀, :M₀₂ => ℳ₀₂)
     fill_properties(property, t)
 end
 
@@ -38,7 +38,7 @@ end
 
 function compute_semi_axes(t::IndexedTable)
     semi_axes = select(t, (:M₀₀,  :M₁₀, :M₀₁, :M₁₁, :M₂₀, :M₀₂) => row -> compute_semi_axes(row...))
-    t = pushcol(t, :semi_axes => semi_axes)
+    t = transform(t, :semi_axes => semi_axes)
 end
 
 
@@ -55,12 +55,12 @@ end
 
 function compute_orientation(t::IndexedTable)
     orientation = select(t, (:M₀₀,  :M₁₀, :M₀₁, :M₁₁, :M₂₀, :M₀₂) => row -> compute_orientation(row...))
-    t = pushcol(t, :orientation => orientation)
+    t = transform(t, :orientation => orientation)
 end
 
 function compute_eccentricity(t::IndexedTable)
     eccentricity = select(t, (:M₀₀,  :M₁₀, :M₀₁, :M₁₁, :M₂₀, :M₀₂) => row -> compute_eccentricity(row...))
-    t = pushcol(t, :eccentricity => eccentricity)
+    t = transform(t, :eccentricity => eccentricity)
 end
 
 function compute_eccentricity(M₀₀::Real, M₁₀::Real, M₀₁::Real, M₁₁::Real, M₂₀::Real, M₀₂::Real)

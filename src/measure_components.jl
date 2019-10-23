@@ -1,4 +1,4 @@
-function measure_components(properties::Tuple{MeasurementProperties, Vararg{MeasurementProperties}}, labels::AbstractArray; N::Int = 0)
+function measure_components(properties::Tuple{AbstractMeasurementProperties, Vararg{AbstractMeasurementProperties}}, labels::AbstractArray; N::Int = 0)
     N = N == 0 ? maximum(labels) : N
     # Set primary key as the component label.
     t = table(Base.OneTo(N); names = [:l], pkey=:l)
@@ -7,7 +7,6 @@ function measure_components(properties::Tuple{MeasurementProperties, Vararg{Meas
     t = usecodes ? append_bitcodes(t, labels, N) : t
     for i = 1:length(properties)
         t = measure_feature(properties[i], t, labels, N)
-        Base.display(t)
     end
     t
 end
@@ -39,7 +38,7 @@ function append_bitcodes(t::IndexedTable, labels::AbstractArray, N::Int)
             end
         end
     end
-    pushcol(t, :Q₀ => 𝓠₀, :Q₁ => 𝓠₁, :Q₂ => 𝓠₂, :Q₃ => 𝓠₃, :Q₄ => 𝓠₄, :Qₓ => 𝓠ₓ)
+    transform(t, :Q₀ => 𝓠₀, :Q₁ => 𝓠₁, :Q₂ => 𝓠₂, :Q₃ => 𝓠₃, :Q₄ => 𝓠₄, :Qₓ => 𝓠ₓ)
 end
 
 

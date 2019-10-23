@@ -5,16 +5,36 @@ version = "0.1.0"
 
 [deps]
 DataStructures = "864edb3b-99cc-5e75-8d2d-829cb0a9cfe8"
-Images = "916415d5-f1e6-5110-898d-aaa5f9f070e0"
+ImageFiltering = "6a3955dd-da59-5b1f-98d4-e7296123deb5"
+ImageMorphology = "787d08f9-d448-5407-9aad-5290dd7ab264"
 IndexedTables = "6deec6e2-d858-57c5-ab9b-e6ca5bd20e43"
 JuliaDB = "a93385a2-3734-596a-9a66-3cfbb77141e6"
 JuliaDBMeta = "2c06ca41-a429-545c-b8f0-5ca7dd64ba19"
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 OffsetArrays = "6fe1bfb0-de20-5000-8ca7-80f57d26f881"
+PlanarConvexHulls = "145d500b-351c-58b3-a0aa-f5d7e249d989"
 StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 TestImages = "5e47fb64-e119-507b-a336-dd2b206d9990"
 
+[compat]
+DataStructures = ">= 0.17.3"
+ImageFiltering = ">= 0.6.5"
+IndexedTables = "^0.12.4"
+JuliaDB  = "^0.12.0"
+JuliaDBMeta  = "^0.4.3"
+ImageCore = ">= 0.8.3"
+PlanarConvexHulls = ">= 0.3.0"
+StaticArrays = ">= 0.11.1"
+OffsetArrays = ">= 0.11.1"
+julia = "^1"
+
 [extras]
+ImageCore = "a09fc81d-aa75-5fe9-8630-4744c3626534"
+ImageMorphology = "787d08f9-d448-5407-9aad-5290dd7ab264"
+IndexedTables = "6deec6e2-d858-57c5-ab9b-e6ca5bd20e43"
+JuliaDBMeta = "2c06ca41-a429-545c-b8f0-5ca7dd64ba19"
+StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [targets]
-test = ["Test"]
+test = ["Test", "ImageCore", "ImageMorphology", "JuliaDBMeta", "IndexedTables", "StaticArrays"]
