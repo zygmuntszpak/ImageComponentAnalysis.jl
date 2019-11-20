@@ -6,8 +6,8 @@ import Base.push!  # for DisjointMinSets
 
 """
 ```
-label_components(Generic(), tf, [connectivity])
-label_components(Generic(), tf, [region])
+label_components(tf, [connectivity])
+label_components(tf, [region])
 ```
 Find the connected components in a binary array `tf`. There are two forms that
 `connectivity` can take:
@@ -25,7 +25,7 @@ The default is `region = 1:ndims(A)`.
 The output `label` is an integer array, where 0 is used for background
 pixels, and each connected region gets a different integer index.
 """
-label_components(t::Generic, A, connectivity = 1:ndims(A), bkg = 0) = label_components!(zeros(Int, size(A)), A, connectivity, bkg)
+label_components(A, connectivity = 1:ndims(A), bkg = 0) = label_components!(zeros(Int, size(A)), A, connectivity, bkg)
 
 #### 4-connectivity in 2d, 6-connectivity in 3d, etc.
 # But in fact you can choose which dimensions are connected

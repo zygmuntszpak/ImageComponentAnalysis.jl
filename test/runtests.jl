@@ -1,5 +1,5 @@
 using ImageComponentAnalysis
-using Test, ImageCore, ImageMorphology, JuliaDBMeta, IndexedTables, StaticArrays
+using Test, ImageCore, DataFramesMeta, StaticArrays, TestImages
 const label_components = ImageComponentAnalysis.label_components
 
 function compare(expected_result, test, N)
@@ -16,16 +16,8 @@ end
 @testset "ImageComponentAnalysis.jl" begin
     include("test_images.jl")
     include("test_volumes.jl")
-    include("test_ellipse_images.jl")
-    include("contour_tracing.jl")
     include("measurement.jl")
-    include("generic_labelling.jl")
-    include("one_component_2d.jl")
-    include("one_component_3d.jl")
     include("basic_topology.jl")
-    include("region_ellipse.jl")
-    include("separate_components.jl")
-    include("costa_outer.jl")
-    include("moore_inner.jl")
     include("minimum_oriented_bounding_box.jl")
+    include("label_components.jl")
 end
