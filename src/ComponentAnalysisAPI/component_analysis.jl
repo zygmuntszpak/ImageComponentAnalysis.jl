@@ -41,7 +41,7 @@ f = BasicMeasurement(area = false, perimiter = true)
 ```
 
 For more examples, please check [`analyze_components`](@ref),
-[`analyize_components!`](@ref) and concrete algorithms.
+[`analyze_components!`](@ref) and concrete algorithms.
 """
 abstract type AbstractComponentAnalysisAlgorithm <: AbstractComponentAnalysis end
 
