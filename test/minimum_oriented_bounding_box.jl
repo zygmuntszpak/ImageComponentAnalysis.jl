@@ -8,11 +8,11 @@
             img[r,c] = 1.0
         end
     end
-    labels = label_components(Generic(),img)
-    t = measure_components((MinimumOrientedBoundingBox(),), labels)
-    oriented_boxes = select(t,:oriented_box)
-    oriented_box_areas = select(t,:oriented_box_area)
-    oriented_box_aspect_ratios = select(t,:oriented_box_aspect_ratio)
+    labels = label_components(img)
+    t = analyze_components(labels, MinimumOrientedBoundingBox())
+    oriented_boxes = t.oriented_box
+    oriented_box_areas = t.oriented_box_area
+    oriented_box_aspect_ratios = t.oriented_box_aspect_ratio
     @test all(first(oriented_boxes) .== expected_vertices)
     @test first(oriented_box_areas) ≈ expected_area
     @test first(oriented_box_aspect_ratios) ≈ expected_aspect_ratio
