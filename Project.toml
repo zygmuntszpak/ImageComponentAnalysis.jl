@@ -1,7 +1,7 @@
 name = "ImageComponentAnalysis"
 uuid = "d9b9e9a0-1569-11e9-2cb5-bbca914b0e89"
 authors = ["Dr. Zygmunt L. Szpak <zygmunt.szpak@gmail.com>"]
-version = "0.2.0"
+version = "0.1.0"
 
 [deps]
 DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
