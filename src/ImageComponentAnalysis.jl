@@ -30,6 +30,7 @@ export
     BasicMeasurement,
     BasicTopology,
     BoundingBox,
+    ContourTopology,
     MinimumOrientedBoundingBox,
     label_components
 end # module
