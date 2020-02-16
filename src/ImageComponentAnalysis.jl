@@ -6,8 +6,14 @@ using DataFrames
 using DataFramesMeta
 using ImageFiltering: padarray, Fill
 using LinearAlgebra
+using OffsetArrays: OffsetVector
 using PlanarConvexHulls
-using StaticArrays: SVector
+using StaticArrays: SVector, MVector
+using UnPack
+using Parameters
+using LeftChildRightSiblingTrees
+
+
 
 
 # TODO: port ComponentAnalysisAPI to ImagesAPI
@@ -20,6 +26,7 @@ include("algorithms/basic_measurement.jl")
 include("algorithms/basic_topology.jl")
 include("algorithms/bounding_box.jl")
 include("algorithms/minimum_oriented_bounding_box.jl")
+include("algorithms/contour_topology.jl")
 include("label_components.jl")
 
 
@@ -32,5 +39,6 @@ export
     BoundingBox,
     ContourTopology,
     MinimumOrientedBoundingBox,
+    establish_contour_hierarchy,
     label_components
 end # module
