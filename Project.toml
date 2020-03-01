@@ -4,6 +4,7 @@ authors = ["Dr. Zygmunt L. Szpak <zygmunt.szpak@gmail.com>"]
 version = "0.1.0"
 
 [deps]
+AbstractTrees = "1520ce14-60c1-5f80-bbc7-55ef81b5835c"
 DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
 DataFramesMeta = "1313f7d8-7da2-5740-9ea0-a2ca25f37964"
 DataStructures = "864edb3b-99cc-5e75-8d2d-829cb0a9cfe8"
@@ -14,7 +15,6 @@ OffsetArrays = "6fe1bfb0-de20-5000-8ca7-80f57d26f881"
 Parameters = "d96e819e-fc66-5662-9728-84c9c7592b0a"
 PlanarConvexHulls = "145d500b-351c-58b3-a0aa-f5d7e249d989"
 StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
-UnPack = "3a884ed6-31ef-47d7-9d2a-63182c4928ed"
 
 [compat]
 DataFrames = "^0.19.4"
@@ -26,6 +26,7 @@ StaticArrays = "0.11.1, ^0.12.0"
 julia = "1.1.0, ^1"
 
 [extras]
+AbstractTrees = "1520ce14-60c1-5f80-bbc7-55ef81b5835c"
 DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
 DataFramesMeta = "1313f7d8-7da2-5740-9ea0-a2ca25f37964"
 ImageCore = "a09fc81d-aa75-5fe9-8630-4744c3626534"
@@ -35,4 +36,4 @@ Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 TestImages = "5e47fb64-e119-507b-a336-dd2b206d9990"
 
 [targets]
-test = ["DataFrames", "DataFramesMeta", "StaticArrays"]
+test = ["AbstractTrees", "ImageCore", "DataFrames", "DataFramesMeta", "Test", "TestImages", "StaticArrays"]

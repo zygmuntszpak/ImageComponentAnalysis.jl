@@ -10,6 +10,7 @@ Depth = 3
 ```@docs
 analyze_components
 analyze_components!
+establish_contour_hierarchy
 label_components
 ```
 

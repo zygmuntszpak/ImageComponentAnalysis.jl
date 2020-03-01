@@ -1,5 +1,6 @@
 using ImageComponentAnalysis
 using Test, ImageCore, DataFramesMeta, StaticArrays, TestImages
+using AbstractTrees
 const label_components = ImageComponentAnalysis.label_components
 
 function compare(expected_result, test, N)
@@ -18,6 +19,7 @@ end
     include("test_volumes.jl")
     include("measurement.jl")
     include("basic_topology.jl")
+    include("contour_topology.jl")
     include("minimum_oriented_bounding_box.jl")
     include("label_components.jl")
 end

@@ -1,17 +1,20 @@
 module ImageComponentAnalysis
 
+
+using AbstractTrees
 # Used in generic_labelling.jl to allow @nexprs macros.
 using Base.Cartesian
 using DataFrames
 using DataFramesMeta
 using ImageFiltering: padarray, Fill
+using LeftChildRightSiblingTrees
 using LinearAlgebra
 using OffsetArrays: OffsetVector
+using Parameters
 using PlanarConvexHulls
 using StaticArrays: SVector, MVector
-using UnPack
-using Parameters
-using LeftChildRightSiblingTrees
+
+
 
 
 
@@ -37,7 +40,7 @@ export
     BasicMeasurement,
     BasicTopology,
     BoundingBox,
-    ContourTopology,
+    #ContourTopology, TODO
     MinimumOrientedBoundingBox,
     establish_contour_hierarchy,
     label_components
