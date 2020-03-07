@@ -9,7 +9,7 @@
 A Julia package containing a number of algorithms for analyzing connected components
 in binary images. In general, the input is an array of labelled components, and the output
 is a [DataFrame](https://github.com/JuliaData/DataFrames.jl) where each row
-represents a connected components, and each column represents an attribute of
+represents a connected component, and each column represents an attribute of
 that connected component. When combined with [Query](https://github.com/queryverse/Query.jl)
 it affords a very flexible and easy way of filtering connected components
 based on their attributes.

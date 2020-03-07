@@ -1,14 +1,17 @@
 """
 ```
-    ContourTopology <: AbstractComponentAnalysisAlgorithm
-    ContourTopology()
-    analyze_components(components, f::ContourTopology)
-    analyze_components!(df::AbstractDataFrame, components, f::ContourTopology)
+    Contour <: AbstractComponentAnalysisAlgorithm
+    Contour()
+    analyze_components(components, f::Contour)
+    analyze_components!(df::AbstractDataFrame, components, f::Contour)
 ```
 Takes as input an array of labelled connected components and returns a
-`DataFrame` with columns that store the contours for each connected component,
-as well as the component labels of parent and child contours.
+`DataFrame` with columns that store the contours for each connected component.
 
+If you require the information about the topology (hierarchy) of the contours
+you can use the `establish_contour_hierarchy` function to obtain a tree
+data structure that reflects the nesting of the contours and stores all
+the contour pixels in a [`DigitalContour`](@ref) type.
 
 # Example
 
@@ -18,12 +21,12 @@ using ImageComponentAnalysis, TestImages, ImageBinarization, ImageCore, Abstract
 img = Gray.(testimage("blobs"))
 img2 = binarize(img, Otsu())
 components = label_components(img2, trues(3,3), 1)
-measurements = analyze_components(components, ContourTopology())
+measurements = analyze_components(components, Contour())
 
 ```
 
 """
-struct ContourTopology <: AbstractComponentAnalysisAlgorithm
+struct Contour <: AbstractComponentAnalysisAlgorithm
 end
 
 abstract type AbstractContour end
@@ -43,12 +46,24 @@ outer boundary, and `false` if it demarcates a hole.
     pixels::Vector{CartesianIndex{2}} = Vector{CartesianIndex{2}}(undef, 0)
 end
 
+function(f::Contour)(df::AbstractDataFrame, labels::AbstractArray{<:Integer})
+    N = maximum(labels)
 
-function(f::ContourTopology)(df::AbstractDataFrame, labels::AbstractArray{<:Integer})
-    # TODO implement this functionality
-    # out = measure_feature(f, df, labels)
-    return df
+    df₁ = DataFrame(l = df.l,
+                    outer_contour = [Vector{CartesianIndex{2}}() for n = 1:N],
+                    hole_contour = [Vector{CartesianIndex{2}}() for n = 1:N])
+
+    tree = establish_contour_hierarchy(labels)
+    for i in PostOrderDFS(tree)
+        @unpack id, is_outer, pixels = i.data
+        if id != 0
+            is_outer ? df₁[id,:outer_contour] = pixels : df₁[id,:hole_contour] = pixels
+        end
+    end
+    df₂ = join(df, df₁, on = :l)
+    return df₂
 end
+
 
 """
 ```
@@ -75,7 +90,7 @@ connected component.
 # Example
 
 ```julia
-using ImageComponentAnalysis, TestImages, ImageBinarization, ImageCore, AbstractTrees
+using ImageComponentAnalysis, TestImages, ImageBinarization, ImageCore, AbstractTrees, Parameters
 
 img = Gray.(testimage("blobs"))
 img2 = binarize(img, Otsu())
@@ -84,7 +99,8 @@ tree = establish_contour_hierarchy(components)
 
 # Iterate over all DigitalContour's in the tree.
 for node in PostOrderDFS(tree)
-    @show node.data
+    @unpack id, is_outer, pixels node.data # See Parameters.jl for "@unpack"
+    @show id, is_outer, pixels
 end
 ```
 
@@ -98,7 +114,6 @@ function establish_contour_hierarchy(labels::AbstractArray{<:Integer})
     labels_padded = padarray(labels, Fill(0, (2,2)))
     f = map(x-> x > 0 ? 1 : 0, labels_padded)
     root = Node(DigitalContour(is_outer = false))
-    # root = Node("Hole Frame")
     # Labeled neighbourhood used by the contour-tracking algorithm.
     # 1 2 3
     # 0 P 4

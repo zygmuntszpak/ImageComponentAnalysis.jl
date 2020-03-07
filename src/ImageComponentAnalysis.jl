@@ -15,10 +15,6 @@ using PlanarConvexHulls
 using StaticArrays: SVector, MVector
 
 
-
-
-
-
 # TODO: port ComponentAnalysisAPI to ImagesAPI
 include("ComponentAnalysisAPI/ComponentAnalysisAPI.jl")
 import .ComponentAnalysisAPI: AbstractComponentAnalysisAlgorithm,
@@ -40,6 +36,7 @@ export
     BasicMeasurement,
     BasicTopology,
     BoundingBox,
+    Contour,
     #ContourTopology, TODO
     MinimumOrientedBoundingBox,
     establish_contour_hierarchy,

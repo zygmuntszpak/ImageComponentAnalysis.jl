@@ -8,7 +8,7 @@
 Takes as input an array of labelled connected components and returns a
 `DataFrame` with columns that store a length-4 vector containing the four corner
 points of the minimum oriented bounding box of each component. It optionally
-also returns the area and aspect ration of the minimum oriented bounding box.
+also returns the area and aspect ratio of the minimum oriented bounding box.
 
 # Example
 
