@@ -2,7 +2,7 @@
 ```
     BasicMeasurement <: AbstractComponentAnalysisAlgorithm
     BasicMeasurement(; area = true,  perimeter = true)
-    analyze_components(components, f::BasicMeasuremen)
+    analyze_components(components, f::BasicMeasurement)
     analyze_components!(dataframe::AbstractDataFrame, components, f::BasicMeasurement)
 ```
 Takes as input an array of labelled connected components and returns a
