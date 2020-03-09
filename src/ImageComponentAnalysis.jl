@@ -12,7 +12,7 @@ using LinearAlgebra
 using OffsetArrays: OffsetVector
 using Parameters
 using PlanarConvexHulls
-using StaticArrays: SVector, MVector
+using StaticArrays
 
 
 # TODO: port ComponentAnalysisAPI to ImagesAPI
@@ -24,8 +24,9 @@ include("algorithms/bitcodes.jl")
 include("algorithms/basic_measurement.jl")
 include("algorithms/basic_topology.jl")
 include("algorithms/bounding_box.jl")
-include("algorithms/minimum_oriented_bounding_box.jl")
 include("algorithms/contour_topology.jl")
+include("algorithms/ellipse_region.jl")
+include("algorithms/minimum_oriented_bounding_box.jl")
 include("label_components.jl")
 
 
@@ -37,6 +38,7 @@ export
     BasicTopology,
     BoundingBox,
     Contour,
+    EllipseRegion,
     #ContourTopology, TODO
     MinimumOrientedBoundingBox,
     establish_contour_hierarchy,

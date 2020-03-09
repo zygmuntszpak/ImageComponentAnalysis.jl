@@ -20,6 +20,7 @@ end
     include("measurement.jl")
     include("basic_topology.jl")
     include("contour_topology.jl")
+    include("ellipse_region.jl")
     include("minimum_oriented_bounding_box.jl")
     include("label_components.jl")
 end
