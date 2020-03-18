@@ -43,20 +43,23 @@ function(f::BasicTopology)(df::AbstractDataFrame, labels::AbstractArray{<:Intege
     present_symbols = names(df)
     required_symbols = [Symbol("Q₀"), Symbol("Q₁"), Symbol("Q₂"), Symbol("Q₃"), Symbol("Q₄"), Symbol("Qₓ")]
     has_bitcodes = all(map( x-> x in present_symbols, required_symbols))
-    out = (!has_bitcodes) ? fill_properties(f, append_bitcodes(df, labels, nrow(df))) : fill_properties(f, df)
+    !(has_bitcodes) ? append_bitcodes!(df, labels, nrow(df)) : nothing
+    fill_properties!(df, f)
+    return nothing
 end
 
-function fill_properties(property::BasicTopology, df₀::AbstractDataFrame)
-    df₁ = property.holes ? determine_holes(df₀) : df₀
-    df₂ = property.euler_number ? compute_euler_number(df₁) : df₁
+function fill_properties!(df::AbstractDataFrame, property::BasicTopology)
+    property.holes ? determine_holes!(df) : nothing
+    property.euler_number ? compute_euler_number!(df) : nothing
 end
 
-function compute_euler_number(df::AbstractDataFrame)
-    @transform(df, euler₄ = (1/4).*(:Q₁ .- :Q₃ .+ (2 .* :Qₓ)), euler₈ = (1/4).*(:Q₁ .- :Q₃ .- (2 .* :Qₓ)))
+function compute_euler_number!(df::AbstractDataFrame)
+    df[!, :euler₄] = (1/4).*(df.Q₁ .- df.Q₃ .+ (2 .* df.Qₓ))
+    df[!, :euler₈] = (1/4).*(df.Q₁ .- df.Q₃ .- (2 .* df.Qₓ))
 end
 
-function determine_holes(df::AbstractDataFrame)
+function determine_holes!(df::AbstractDataFrame)
     # Number of holes equals the number of connected components (i.e. 1) minus
     # the Euler number.
-    @transform(df, holes = 1 .- (1/4).*(:Q₁ .- :Q₃ .- (2 .* :Qₓ)))
+    df[!, :holes] = 1 .- (1/4).*(df.Q₁ .- df.Q₃ .- (2 .* df.Qₓ))
 end

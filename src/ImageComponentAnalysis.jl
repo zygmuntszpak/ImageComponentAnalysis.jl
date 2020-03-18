@@ -5,7 +5,6 @@ using AbstractTrees
 # Used in generic_labelling.jl to allow @nexprs macros.
 using Base.Cartesian
 using DataFrames
-using DataFramesMeta
 using ImageFiltering: padarray, Fill
 using LeftChildRightSiblingTrees
 using LinearAlgebra

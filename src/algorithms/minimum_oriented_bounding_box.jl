@@ -18,7 +18,8 @@ using ImageComponentAnalysis, TestImages, ImageBinarization, ColorTypes
 img = Gray.(testimage("blobs"))
 img2 = binarize(img, Otsu())
 components = label_components(img2, trues(3,3), 1)
-measurements = analyze_components(components, MinimumOrientedBoundingBox(oriented_box_area = true, oriented_box_aspect_ratio = true))
+algorithm = MinimumOrientedBoundingBox(oriented_box_area = true, oriented_box_aspect_ratio = true)
+measurements = analyze_components(components, algorithm)
 
 ```
 
@@ -29,27 +30,41 @@ Base.@kwdef struct MinimumOrientedBoundingBox <: AbstractComponentAnalysisAlgori
 end
 
 function(f::MinimumOrientedBoundingBox)(df::AbstractDataFrame, labels::AbstractArray{<:Integer})
-    out = measure_feature(f, df, labels)
+    measure_feature!(df, labels, f)
+    return nothing
 end
 
-function measure_feature(property::MinimumOrientedBoundingBox, df::AbstractDataFrame, labels::AbstractArray{<:Integer})
+function measure_feature!(df::AbstractDataFrame, labels::AbstractArray{<:Integer}, property::MinimumOrientedBoundingBox)
     N = maximum(labels)
     oriented_boxes = [determine_minimum_rectangle(findall(labels .== n))  for n = 1:N]
-    df₁ = @transform(df, oriented_box = oriented_boxes)
-    fill_properties(property, df₁)
+    df[!, :oriented_box] = oriented_boxes
+    fill_properties!(df, property)
+    return nothing
 end
 
-function fill_properties(property::MinimumOrientedBoundingBox, df₀::AbstractDataFrame)
-    df₁ = property.oriented_box_area ? compute_oriented_box_area(df₀) : df₀
-    df₂ = property.oriented_box_aspect_ratio ? compute_oriented_box_aspect_ratio(df₁) : df₁
+function fill_properties!(df::AbstractDataFrame, property::MinimumOrientedBoundingBox)
+    property.oriented_box_area ? compute_oriented_box_area!(df) : nothing
+    property.oriented_box_aspect_ratio ? compute_oriented_box_aspect_ratio!(df) : nothing
 end
 
-function compute_oriented_box_area(df::AbstractDataFrame)
-    @transform(df, oriented_box_area  = norm.(getindex.(:oriented_box, 2) .- getindex.(:oriented_box, 1)) .*  norm.(getindex.(:oriented_box, 3) .- getindex.(:oriented_box, 2)))
+function compute_oriented_box_area!(df::AbstractDataFrame)
+    df[!, :oriented_box_area] = Array{Float64}(undef, size(df,1))
+    for r in eachrow(df)
+        l₁ = norm(r.oriented_box[2] - r.oriented_box[1])
+        l₂ = norm(r.oriented_box[3] - r.oriented_box[2])
+        r.oriented_box_area = l₁ * l₂
+    end
+    return nothing
 end
 
-function compute_oriented_box_aspect_ratio(df::AbstractDataFrame)
-    @transform(df, oriented_box_aspect_ratio = max.(norm.(getindex.(:oriented_box,2) .- getindex.(:oriented_box,1)), norm.(getindex.(:oriented_box,3) .- getindex.(:oriented_box,2))) ./ min.(norm.(getindex.(:oriented_box,2) .- getindex.(:oriented_box,1)), norm.(getindex.(:oriented_box, 3) .- getindex.(:oriented_box,2))))
+function compute_oriented_box_aspect_ratio!(df::AbstractDataFrame)
+    df[!, :oriented_box_aspect_ratio] = Array{Float64}(undef, size(df,1))
+    for r in eachrow(df)
+        l₁ = norm(r.oriented_box[2] - r.oriented_box[1])
+        l₂ = norm(r.oriented_box[3] - r.oriented_box[2])
+        r.oriented_box_aspect_ratio = max(l₁, l₂) / min(l₁, l₂)
+    end
+    return nothing
 end
 
 function determine_minimum_rectangle(points₀::AbstractArray)

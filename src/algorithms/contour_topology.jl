@@ -25,6 +25,8 @@ measurements = analyze_components(components, Contour())
 
 ```
 
+# Reference
+1. S. Suzuki and K. Abe, “Topological structural analysis of digitized binary images by border following,” Computer Vision, Graphics, and Image Processing, vol. 29, no. 3, p. 396, Mar. 1985.
 """
 struct Contour <: AbstractComponentAnalysisAlgorithm
 end
@@ -48,20 +50,16 @@ end
 
 function(f::Contour)(df::AbstractDataFrame, labels::AbstractArray{<:Integer})
     N = maximum(labels)
-
-    df₁ = DataFrame(l = df.l,
-                    outer_contour = [Vector{CartesianIndex{2}}() for n = 1:N],
-                    hole_contour = [Vector{CartesianIndex{2}}() for n = 1:N])
-
+    df[!, :outer_contour] = [Vector{CartesianIndex{2}}() for n = 1:N]
+    df[!, :hole_contour] = [Vector{CartesianIndex{2}}() for n = 1:N]
     tree = establish_contour_hierarchy(labels)
     for i in PostOrderDFS(tree)
         @unpack id, is_outer, pixels = i.data
         if id != 0
-            is_outer ? df₁[id,:outer_contour] = pixels : df₁[id,:hole_contour] = pixels
+            is_outer ? df[id,:outer_contour] = pixels : df[id,:hole_contour] = pixels
         end
     end
-    df₂ = join(df, df₁, on = :l)
-    return df₂
+    return nothing
 end
 
 

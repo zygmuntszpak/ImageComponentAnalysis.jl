@@ -1,4 +1,4 @@
-function append_bitcodes(df::AbstractDataFrame, labels::AbstractArray{<:Integer}, N::Int)
+function append_bitcodes!(df::AbstractDataFrame, labels::AbstractArray{<:Integer}, N::Int)
     # Stores counts of Bit Quad patterns for each component.
     𝓠₀ = zeros(Int, N)
     𝓠₁ = zeros(Int, N)
@@ -25,7 +25,13 @@ function append_bitcodes(df::AbstractDataFrame, labels::AbstractArray{<:Integer}
             end
         end
     end
-    @transform(df, Q₀ = 𝓠₀, Q₁ = 𝓠₁, Q₂ = 𝓠₂, Q₃ = 𝓠₃, Q₄ = 𝓠₄, Qₓ = 𝓠ₓ)
+    df[!, :Q₀] = 𝓠₀
+    df[!, :Q₁] = 𝓠₁
+    df[!, :Q₂] = 𝓠₂
+    df[!, :Q₃] = 𝓠₃
+    df[!, :Q₄] = 𝓠₄
+    df[!, :Qₓ] = 𝓠ₓ
+    return nothing
 end
 
 
