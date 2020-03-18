@@ -1,5 +1,5 @@
 using ImageComponentAnalysis
-using Test, ImageCore, DataFramesMeta, StaticArrays, TestImages
+using Test, ImageCore, StaticArrays
 using AbstractTrees
 const label_components = ImageComponentAnalysis.label_components
 
@@ -23,4 +23,5 @@ end
     include("ellipse_region.jl")
     include("minimum_oriented_bounding_box.jl")
     include("label_components.jl")
+    include("analyze_components_api.jl")
 end

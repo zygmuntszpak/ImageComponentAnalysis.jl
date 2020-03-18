@@ -29,14 +29,14 @@ Base.@kwdef struct BoundingBox <: AbstractComponentAnalysisAlgorithm
 end
 
 function(f::BoundingBox)(df::AbstractDataFrame, labels::AbstractArray{<:Integer})
-    out = measure_feature(f, df, labels)
+    measure_feature!(df, labels, f)
+    return nothing
 end
 
-function measure_feature(property::BoundingBox, df::AbstractDataFrame, labels::AbstractArray)
+function measure_feature!(df::AbstractDataFrame, labels::AbstractArray, property::BoundingBox)
     N =  maximum(labels)
     init = StepRange(typemax(Int),-1,-typemax(Int))
     coords = [(init, init) for i = 1:N]
-
     for i in CartesianIndices(labels)
         l = labels[i]
         if  l != 0
@@ -48,15 +48,16 @@ function measure_feature(property::BoundingBox, df::AbstractDataFrame, labels::A
             coords[l] = rs, cs
         end
     end
-    coords_matrix = reshape(reinterpret(StepRange{Int,Int},coords),(2,N))
-    df₁ = @transform(df, box_indices = coords)
-    fill_properties(property, df₁)
+    df[!, :box_indices] = coords
+    fill_properties!(df, property)
+    return nothing
 end
 
-function fill_properties(property::BoundingBox, df₀::AbstractDataFrame)
-    df₁ = property.box_area ? compute_box_area(df₀) : df₀
+function fill_properties!(df::AbstractDataFrame, property::BoundingBox)
+    property.box_area ? compute_box_area(df) : nothing
 end
 
 function compute_box_area(df::AbstractDataFrame)
-    @transform(df, box_area = length.(first.(:box_indices)) .*  length.(last.(:box_indices)))
+    df[!, :box_area] = length.(first.(df.box_indices)) .*  length.(last.(df.box_indices))
+    return nothing
 end
