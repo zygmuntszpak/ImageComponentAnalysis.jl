@@ -44,6 +44,6 @@
                        EllipseRegion())
     measurements = analyze_components(components, algorithms)
 
-    @test all(names(measurements) .== symbols)
+    @test all(Symbol.(names(measurements)) .== symbols)
 
 end

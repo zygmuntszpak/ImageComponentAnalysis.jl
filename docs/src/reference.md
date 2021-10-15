@@ -39,3 +39,10 @@ BoundingBox
 ```@docs
 MinimumOrientedBoundingBox
 ```
+
+## Types
+
+### DigitalContour
+```@docs
+DigitalContour
+```
