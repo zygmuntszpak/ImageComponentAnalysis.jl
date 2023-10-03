@@ -1,7 +1,7 @@
 name = "ImageComponentAnalysis"
 uuid = "d9b9e9a0-1569-11e9-2cb5-bbca914b0e89"
 authors = ["Dr. Zygmunt L. Szpak <zygmunt.szpak@gmail.com>"]
-version = "0.2.0"
+version = "0.2.1"
 
 [deps]
 AbstractTrees = "1520ce14-60c1-5f80-bbc7-55ef81b5835c"
