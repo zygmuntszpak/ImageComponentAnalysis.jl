@@ -1,5 +1,5 @@
 @testset "minimum oriented bounding box" begin
-    expected_vertices = [SVector(30.0, 50.0), SVector(30.0, 100.0), SVector(60.0, 100.0), SVector(60.0, 50.0)]
+    expected_vertices = [SVector(30.0, 100.0), SVector(60.0, 100.0), SVector(60.0, 50.0), SVector(30.0, 50.0)]
     expected_area = 1500.0
     expected_aspect_ratio = 50/30
     img = zeros(Gray{Float64},(200,200))

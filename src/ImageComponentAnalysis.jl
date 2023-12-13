@@ -10,7 +10,7 @@ using LeftChildRightSiblingTrees
 using LinearAlgebra
 using OffsetArrays: OffsetVector
 using Parameters
-using PlanarConvexHulls
+using ConvexHulls2d
 using StaticArrays
 
 
