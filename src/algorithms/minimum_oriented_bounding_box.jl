@@ -69,11 +69,11 @@ end
 
 function determine_minimum_rectangle(points₀::AbstractArray)
     # Determine the convex hull for the specified set of points.
-    points = map(x-> SVector(x.I), points₀)
-    chull = ConvexHull{CW, Float64}()
-    jarvis_march!(chull, points)
-    N = num_vertices(chull)
-    vert = vertices(chull)
+    points = map(x-> SVector(x.I), points₀) 
+    hull = ConvexHulls2d.ConvexHull(points)
+    vert = ConvexHulls2d.vertices(hull)
+    N = length(vert)
+
     if N == 1
         # When there is only a single vertex there is no unique minimum bounding
         # retangle. In this instance we mark the four corners of the bounding
